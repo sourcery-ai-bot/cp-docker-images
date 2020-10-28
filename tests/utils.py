@@ -101,8 +101,7 @@ class TestCluster():
     def get_project(self):
         # Dont reuse the client to fix this bug : https://github.com/docker/compose/issues/1275
         client = docker_client(Environment())
-        project = Project.from_config(self.name, self.cd, client)
-        return project
+        return Project.from_config(self.name, self.cd, client)
 
     def start(self):
         self.get_project().up()

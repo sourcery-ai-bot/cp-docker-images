@@ -111,7 +111,7 @@ class ClusterHostNetworkTest(unittest.TestCase):
         rebalance_status = self.cluster.run_command_on_service("kafka-1", ADB_STATUS)
 
         rebalance_complete = ""
-        for i in xrange(120):
+        for _ in xrange(120):
             rebalance_complete = self.cluster.run_command_on_service("kafka-1", ADB_FINISH)
             if "The rebalance has completed and throttling has been disabled" in rebalance_complete:
                 break
@@ -130,7 +130,7 @@ class ClusterHostNetworkTest(unittest.TestCase):
 
         parsed_logs = json.loads(logs)
         topics = parsed_logs["topics"]
-        for t in parsed_logs["topics"]:
+        for t in topics:
             for p in t["partitions"]:
                 for r in p["replicas"]:
                     assert r["id"] != removed_broker

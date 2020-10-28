@@ -49,7 +49,7 @@ def create_connector(name, create_command, host, port):
         host_config={'NetworkMode': 'host'})
 
     status = None
-    for i in xrange(25):
+    for _ in xrange(25):
         source_logs = utils.run_docker_command(
             image="confluentinc/cp-kafka-connect",
             command=CONNECTOR_STATUS.format(host=host, port=port, name=name),
@@ -61,9 +61,7 @@ def create_connector(name, create_command, host, port):
             time.sleep(1)
         else:
             status = connector["connector"]["state"]
-            if status == "FAILED":
-                return status
-            elif status == "RUNNING":
+            if status in ["FAILED", "RUNNING"]:
                 return status
             elif status == "UNASSIGNED":
                 time.sleep(1)

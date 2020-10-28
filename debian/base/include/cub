@@ -98,7 +98,7 @@ def check_zookeeper_ready(connect_string, timeout):
     jvm_opts = ""
     is_zk_sasl_enabled = os.environ.get("ZOOKEEPER_SASL_ENABLED") or ""
 
-    if (not is_zk_sasl_enabled.upper() == "FALSE") and os.environ.get("KAFKA_OPTS"):
+    if is_zk_sasl_enabled.upper() != "FALSE" and os.environ.get("KAFKA_OPTS"):
         jvm_opts = os.environ.get("KAFKA_OPTS")
 
     cmd = cmd_template.format(
@@ -159,10 +159,7 @@ def check_kafka_ready(expected_brokers, timeout, config, bootstrap_broker_list=N
 
     exit_code = subprocess.call(cmd, shell=True)
 
-    if exit_code == 0:
-        return True
-    else:
-        return False
+    return exit_code == 0
 
 
 def check_schema_registry_ready(host, port, service_timeout):
